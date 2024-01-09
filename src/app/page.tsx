@@ -231,6 +231,16 @@ export default function Home() {
     .then(function (response) {
 
       alert(response.data.msg);
+      SetRegUsername("");
+      SetRegPassword("");
+      SetRegName("");
+      SetRegAge("");
+      SetRegRole("");
+      SetRegBio("");
+      SetRegSpecialty("");
+      SetRegEducation("");
+      SetRegYearsWorking("");
+      handleClose();
     })
     .catch(function (error) {
       console.log(error);
