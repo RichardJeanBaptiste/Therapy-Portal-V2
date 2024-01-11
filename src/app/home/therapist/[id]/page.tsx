@@ -17,10 +17,11 @@ const useStyles = (theme: any) => ({
     root:{
         position: 'absolute',
         height: '100%',
+        left: '3%',
         
         [theme.breakpoints.down('xl')]: {
             top: '0',
-            left: '7%',
+            left: '5%',
             width: '93vw'
         },
 
