@@ -17,7 +17,7 @@ const useStyles = (theme: any) => ({
     root:{
         position: 'absolute',
         height: '100%',
-        left: '3%',
+        left: '5%',
         
         [theme.breakpoints.down('xl')]: {
             top: '0',

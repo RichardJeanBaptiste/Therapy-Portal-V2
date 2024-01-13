@@ -166,6 +166,7 @@ const Navbar = (props: any) => {
                     sx={styles.mobileDrawer}
                 >
                     <List sx={styles.listStyle}>
+
                         <ListItemIcon sx={styles.listIcons}>
                             <Tooltip title="Home" placement='right' arrow>
                                 <IconButton onClick={props.showHome}>
@@ -209,6 +210,7 @@ const Navbar = (props: any) => {
                                 </IconButton>
                             </Tooltip>
                         </ListItemIcon>
+                       
                     </List>
                 </Drawer>
             </>
@@ -216,7 +218,7 @@ const Navbar = (props: any) => {
     }
 
     const Nav = () => {
-        if(screenWidth <= 425){
+        if(screenWidth < 500){
             return (
                 <MobileNav/>
             )
