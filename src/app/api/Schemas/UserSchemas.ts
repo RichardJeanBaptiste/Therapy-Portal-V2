@@ -8,6 +8,7 @@ const TherapistSchema = new mongoose.Schema({
     DatesAvailable: Array,
     DatesScheduled: Array,
     Clients: Array,
+    History: Array,
     Info: Array,
 })
 
@@ -17,6 +18,7 @@ const ClientSchema = new mongoose.Schema({
     Role: String,
     DatesReserved: Array,
     Therapists: Array,
+    History: Array,
     Info: Array,
 })
 

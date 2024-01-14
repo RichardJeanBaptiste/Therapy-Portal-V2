@@ -5,6 +5,25 @@ import bcrypt from 'bcrypt';
 import { NextResponse } from "next/server";
 
 
+interface Therapist {
+    id: string;
+    Username: string;
+    Role: string;
+    DatesAvailable: Array<string>;
+    DatesScheduled: Array<string>;
+    Clients: Array<string>;
+    Info: string;
+}
+  
+interface Client {
+    _id: string;
+    Username: string;
+    Role: string;
+    DatesReserved: Array<string>;
+    Therapists: Array<string>;
+    Info: string;
+}
+
 
 let mongo_uri:string | undefined = process.env.MONGO_URI;
 const saltRounds = 10;
@@ -105,7 +124,7 @@ export const findUser = async (requestUsername: string, requestPassword: string)
     }
 }
 
-export const getUserFromUsername = async (requestUsername: string): Promise<Array<string> | Object | null> => {
+export const getUserFromUsername = async (requestUsername: string): Promise<Array<string> | Object | null | Therapist> => {
     let query1 = await therapists.findOne({Username: requestUsername}).then((docs) => {
         return docs;
     });
@@ -117,7 +136,7 @@ export const getUserFromUsername = async (requestUsername: string): Promise<Arra
     if(query1 !== null){
         // therapist
        
-        return {"id":query1._id, "Username":query1.Username, "Role":query1.Role, "DatesAvailable":query1.DatesAvailable, "DatesScheduled":query1.DatesScheduled, "Client":query1.Clients, "Info":query1.Info}
+        return { "id": query1._id, "Username": query1.Username, "Role": query1.Role, "DatesAvailable": query1.DatesAvailable, "DatesScheduled": query1.DatesScheduled, "Clients": query1.Clients, "Info": query1.Info } as Therapist;
        
     } else if(query2 !== null){
         //client

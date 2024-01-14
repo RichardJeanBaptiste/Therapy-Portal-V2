@@ -101,7 +101,7 @@ const DesktopCalender = () => {
     const theme = useTheme();
     const styles = useStyles(theme);
 
-    const {date, setDate, activeDate, SetActiveDate, dates, SetDates, add, remove, today} = useContext(CalenderContext);
+    const {date, activeDate, SetActiveDate, dates, SetDates, add, remove, today} = useContext(CalenderContext);
     
     useEffect(() => {
         const year = dayjs().year();

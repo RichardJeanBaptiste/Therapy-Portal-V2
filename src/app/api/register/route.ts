@@ -29,6 +29,7 @@ export async function POST(request: Request){
                     Password: hashedPassword,
                     Role: x.role,
                     DatesAvailable: [],
+                    History: [],
                     Clients: [],
                     Info: {
                         Name: x.name,
@@ -56,6 +57,7 @@ export async function POST(request: Request){
                     Password: hashedPassword,
                     Role: x.role,
                     DatesReserved: [],
+                    History: [],
                     Therapists: [],
                     Info: {
                         Name: x.name,
