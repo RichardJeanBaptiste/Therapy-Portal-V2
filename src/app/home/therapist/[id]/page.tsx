@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { useTheme }  from '@mui/material/styles';
 import axios from 'axios';
 import Navbar from '@/app/components/Navbar';
-import Calender from '@/app/components/Calender';
+import Calender from '@/app/components/Calender/Calender';
 import History from '@/app/components/History';
 import Clients from '@/app/components/Clients';
 import Therapists from '@/app/components/Therapists';

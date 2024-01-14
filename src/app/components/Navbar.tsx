@@ -58,7 +58,7 @@ const Navbar = (props: any) => {
     const theme = useTheme();
     const styles = useStyles(theme);
 
-    const [screenWidth, SetScreenWidth] = useState(426);
+    const [screenWidth, SetScreenWidth] = useState(window.innerWidth);
 
     const handleResize = () => {
         SetScreenWidth(window.innerWidth);
@@ -218,14 +218,10 @@ const Navbar = (props: any) => {
     }
 
     const Nav = () => {
-        if(screenWidth < 500){
-            return (
-                <MobileNav/>
-            )
+        if(screenWidth < 768){
+            return (<MobileNav/>)
         } else {
-            return (
-                <LargeNav/>
-            )
+            return (<LargeNav/>)
         }
     }
 
