@@ -50,7 +50,19 @@ const useStyles = (theme: any) => ({
         width: '94vw',
 
         [theme.breakpoints.down('xl')]: {
-            marginTop: '11%',
+            marginTop: '0%',
+        },
+
+        [theme.breakpoints.down('lg')]: {
+            marginTop: '1%',
+        },
+
+        [theme.breakpoints.down('md')]: {
+            marginTop: '1%',
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            marginTop: '1%',
         },
     },
     headerTitle: {
