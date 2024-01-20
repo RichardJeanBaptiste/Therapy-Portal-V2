@@ -1,8 +1,9 @@
 "use client"
 
 import React, {useState} from 'react';
-import { Box, Typography, Modal } from "@mui/material";
+import { Box, Typography, Modal, Divider, Button } from "@mui/material";
 import { useTheme }  from '@mui/material/styles';
+import axios from 'axios';
 
 const useStyles = (theme: any) => ({
     header: {
@@ -19,7 +20,7 @@ const useStyles = (theme: any) => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 450,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -41,11 +42,24 @@ const useStyles = (theme: any) => ({
         padding: '0.25rem',  
         marginTop: '0.25rem', 
         marginBottom: '0.25rem'
+    },
+    innerModalBox: {
+        display: 'flex',
+        flexDirection: 'row',
+        width:'100%',
+        height: '98%'
+    },
+    innerModal1: {
+        width: '50%'
+    },
+    innerModal2: {
+        width: '32%',
+        marginLeft: '17%'
     }
 })
 
 
-const Day = ({day, rowIdx, currentDate, setActive, dayheader}: any) => {
+const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) => {
 
     const theme = useTheme();
     const styles = useStyles(theme);
@@ -68,6 +82,31 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader}: any) => {
         handleOpen();
     }
 
+    const makeAvailable = () => {
+        
+        axios.post('/api/make_date_available/', {
+            Username: username,
+            newDate: currentDate
+        }).then(function(response){
+            alert(response.data.msg);
+        }).catch(function (error) {
+           console.log(error);
+           alert("Something went wrong :(");
+        });
+    }
+
+    const addClient = () => {
+
+    }
+
+    const deleteReservation = () => {
+
+    }
+
+    const cancel = () => {
+        handleClose();
+    }
+
     return (
         <Box sx={{
                 border: '1px solid #e2e8f0',
@@ -84,12 +123,30 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader}: any) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={styles.modalStyle}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" align='center' sx={{ paddingBottom: '2%'}}>
                         {currentDate.format("MM-DD-YY")}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }} onClick={handleClose}>
-                        Close
-                    </Typography>
+
+                    <Box sx={styles.innerModalBox}>
+                        <Box sx={styles.innerModal1}>
+                            <Button variant="text" onClick={makeAvailable}>Make Available</Button>
+                            <Button variant="text" onClick={addClient}>Add Client</Button>
+                            <Button variant="text" onClick={deleteReservation}>Delete Reservation</Button>
+                            <Button variant="text" onClick={cancel}>Cancel</Button>
+                        </Box>
+
+                        <Divider orientation='vertical' variant="middle" flexItem sx={{height: '200px'}}/>
+
+                        <Box sx={styles.innerModal2}>
+                            <Typography variant="h6" component="p" align='center'>Appointments Scheduled</Typography>
+                            <ul>
+                                <li>A</li>
+                                <li>B</li>
+                                <li>C</li>
+                                <li>D</li>
+                            </ul>
+                        </Box>
+                    </Box>
                 </Box>
             </Modal>
 

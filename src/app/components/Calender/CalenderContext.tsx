@@ -7,6 +7,7 @@ import dayjs, { Dayjs, ManipulateType} from 'dayjs';
 type DatesState = Dayjs[][];
 
 export interface CalenderContextInterface {
+    username: string,
     date: Dayjs,
     setDate: Dispatch<SetStateAction<Dayjs>>,
     activeDate: Dayjs,
@@ -27,11 +28,13 @@ const defaultState = {
 export const CalenderContext = createContext<CalenderContextInterface>(defaultState);
 
 type CalenderProviderProps = {
-    children: ReactNode
+    children: ReactNode,
+    username: string
 }
 
-export const CalenderProvider = ({children}: CalenderProviderProps) => {
+export const CalenderProvider = ({children, username}: CalenderProviderProps) => {
 
+    //const [username, SetUsername] = useState(props.username);
     const [date, setDate] = useState(dayjs());
     const [activeDate, SetActiveDate] = useState(dayjs());
     const [dates, SetDates] = useState<DatesState>([]);
@@ -86,7 +89,7 @@ export const CalenderProvider = ({children}: CalenderProviderProps) => {
     }
 
     return (
-        <CalenderContext.Provider value={{ date, setDate, activeDate, SetActiveDate, dates, SetDates, add, remove, today}}>
+        <CalenderContext.Provider value={{ date, setDate, activeDate, SetActiveDate, dates, SetDates, add, remove, today, username}}>
             {children}
         </CalenderContext.Provider>
     )

@@ -79,7 +79,7 @@ const Homepage = (props: any) => {
                 )
                 break;
             case "Calender":
-                CurrentComp = <Calender/>
+                CurrentComp = <Calender username={user.Username}/>
                 break;
             case "History":
                 CurrentComp = <History/>

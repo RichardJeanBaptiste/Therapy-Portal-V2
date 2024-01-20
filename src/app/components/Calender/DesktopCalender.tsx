@@ -113,7 +113,7 @@ const DesktopCalender = () => {
     const theme = useTheme();
     const styles = useStyles(theme);
 
-    const {date, activeDate, SetActiveDate, dates, SetDates, add, remove, today} = useContext(CalenderContext);
+    const {date, activeDate, SetActiveDate, dates, SetDates, add, remove, today, username} = useContext(CalenderContext);
     
     useEffect(() => {
         const year = dayjs().year();
@@ -176,7 +176,7 @@ const DesktopCalender = () => {
                             <React.Fragment key={i}>
                                 {row.map((day, idx) => (
                                     <Box key={idx}>
-                                        <Day day={day} key={idx} rowIdx={i} currentDate={activeDate} setActive={SetActiveDate} dayheader={styles.dayheader}/>
+                                        <Day day={day} key={idx} rowIdx={i} currentDate={activeDate} setActive={SetActiveDate} dayheader={styles.dayheader} username={username}/>
                                     </Box>
                                 ))}
                             </React.Fragment>

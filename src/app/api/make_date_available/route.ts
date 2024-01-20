@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-import { connectToMongo, getUserFromUsername } from "../ServerFunctions";
+import { connectToMongo } from "../ServerFunctions";
 import 'dotenv/config';
 import { therapists, clients } from "../Schemas/UserSchemas";
 
@@ -24,8 +24,7 @@ export async function POST(request: Request){
 
         let queryUsername = data.Username;
         let queryDate = data.newDate;
-
-        let query = await getUserFromUsername(queryUsername);
+  
 
         let query1 = await therapists.findOne({Username: queryUsername}).then((docs) => {
             return docs;
@@ -47,7 +46,6 @@ export async function POST(request: Request){
             return null;
         }
         
-        console.log(query)
         return NextResponse.json({"msg": resMessage}, {status: 200});
 
     } catch (error) {

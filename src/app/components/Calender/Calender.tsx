@@ -6,7 +6,7 @@ import DesktopCalender from './DesktopCalender';
 import MobileCalender from './MobileCalender';
 
 
-const Calender = () => {
+const Calender = (props: any) => {
 
     const [screenWidth, SetScreenWidth] = useState(window.innerWidth);
 
@@ -25,13 +25,13 @@ const Calender = () => {
 
     if(screenWidth < 768){
         return (
-            <CalenderProvider>
+            <CalenderProvider username={props.username}>
                 <MobileCalender/>
             </CalenderProvider>
         )
     } else {
         return (
-            <CalenderProvider>
+            <CalenderProvider username={props.username}>
                 <DesktopCalender/>
             </CalenderProvider>
         )
