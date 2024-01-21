@@ -1,72 +1,88 @@
 "use client"
 
 import React, {useState} from 'react';
-import { Box, Typography, Modal, Divider, Button } from "@mui/material";
+import { Box, Typography, Modal, Divider, Button, FormControl, TextField } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useTheme }  from '@mui/material/styles';
 import axios from 'axios';
-
-const useStyles = (theme: any) => ({
-    header: {
-        display:'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center',
-        cursor: 'grab',
-        '&:hover': {
-            
-        }
-    },
-    modalStyle: {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 450,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    },
-    selectedDay: {
-        fontSize: '0.875rem', 
-        padding: '0.25rem',  
-        marginTop: '0.25rem', 
-        marginBottom: '0.25rem', 
-        backgroundColor: '#3b82f6', 
-        color: '#ffffff',  
-        borderRadius: '9999px',  
-        width: '1.75rem', 
-        height: '1.75rem'
-    },
-    unSelectedDay: {
-        fontSize: '0.875rem', 
-        padding: '0.25rem',  
-        marginTop: '0.25rem', 
-        marginBottom: '0.25rem'
-    },
-    innerModalBox: {
-        display: 'flex',
-        flexDirection: 'row',
-        width:'100%',
-        height: '98%'
-    },
-    innerModal1: {
-        width: '50%'
-    },
-    innerModal2: {
-        width: '32%',
-        marginLeft: '17%'
-    }
-})
+import dayjs from 'dayjs';
 
 
 const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) => {
 
-    const theme = useTheme();
-    const styles = useStyles(theme);
-
+    const [showMainModel, SetShowMainModel] = useState("flex");
+    const [showAddClient, SetShowAddClient] = useState("none");
+    const [clientFirst, SetClientFirst] = useState("");
+    const [clientLast, SetClientLast] = useState("");
+    const [appTime, SetAppTime] = useState("");
+    const [duration, SetDuration] = useState("30");
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const useStyles = (theme: any) => ({
+        header: {
+            display:'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            cursor: 'grab',
+            '&:hover': {
+                
+            }
+        },
+        modalStyle: {
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 450,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+        },
+        selectedDay: {
+            fontSize: '0.875rem', 
+            padding: '0.25rem',  
+            marginTop: '0.25rem', 
+            marginBottom: '0.25rem', 
+            backgroundColor: '#3b82f6', 
+            color: '#ffffff',  
+            borderRadius: '9999px',  
+            width: '1.75rem', 
+            height: '1.75rem'
+        },
+        unSelectedDay: {
+            fontSize: '0.875rem', 
+            padding: '0.25rem',  
+            marginTop: '0.25rem', 
+            marginBottom: '0.25rem'
+        },
+        innerModalBox: {
+            display: showMainModel,
+            flexDirection: 'row',
+            width:'100%',
+            height: '98%'
+        },
+        innerModal1: {
+            width: '50%'
+        },
+        innerModal2: {
+            width: '32%',
+            marginLeft: '17%'
+        },
+        add_client: {
+            display: showAddClient,
+        },
+        textField1: {
+            paddingBottom: '2%',
+        }
+    })
+
+    const theme = useTheme();
+    const styles = useStyles(theme);
 
     
     const getCurrentDay = () => {
@@ -95,8 +111,31 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
         });
     }
 
-    const addClient = () => {
+    const changeClientDisplay = () => {
 
+        if(showAddClient === "none"){
+            SetShowAddClient("block");
+            SetShowMainModel("none");
+        } else {
+            SetShowAddClient("none");
+            SetShowMainModel("flex");
+        }    
+    }
+
+    const addClient = () => {
+        axios.post('/api/add_client/', {
+            Username: username,
+            Firstname: clientFirst,
+            Lastname: clientLast, 
+            newDate: currentDate,
+            appointmentTime: appTime,
+            duration: duration
+        }).then(function(response){
+            alert(response.data.msg);
+        }).catch(function(error){
+            console.log(error);
+            alert("Something went wrong :(");
+        });
     }
 
     const deleteReservation = () => {
@@ -130,7 +169,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
                     <Box sx={styles.innerModalBox}>
                         <Box sx={styles.innerModal1}>
                             <Button variant="text" onClick={makeAvailable}>Make Available</Button>
-                            <Button variant="text" onClick={addClient}>Add Client</Button>
+                            <Button variant="text" onClick={changeClientDisplay}>Add Client</Button>
                             <Button variant="text" onClick={deleteReservation}>Delete Reservation</Button>
                             <Button variant="text" onClick={cancel}>Cancel</Button>
                         </Box>
@@ -145,9 +184,35 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
                                 <li>C</li>
                                 <li>D</li>
                             </ul>
-                        </Box>
+                        </Box>  
                     </Box>
-                </Box>
+
+                    <Box sx={styles.add_client}>
+
+                        <FormControl sx={{ width: '100%' }}>
+                            <TextField sx={styles.textField1} type='text' variant='outlined' label='First Name' fullWidth/>
+                            <TextField sx={styles.textField1} type='text' variant='outlined' label='Last Name' fullWidth/>
+
+                            <Box sx={{ paddingBottom: '2%'}}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <TimePicker label="Time" onChange={(value: any) => SetAppTime(dayjs(value).format('hh:mm:ss A'))}/>
+                                </LocalizationProvider>
+                            </Box>
+
+                            <Box sx={{ paddingBottom: '2%'}}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <TimePicker label='duration' views={['minutes', 'seconds']} format="mm:ss" onChange={(value: any) => SetDuration(dayjs(value).format('mm:ss')) }/>
+                                </LocalizationProvider>
+                            </Box>  
+                        </FormControl>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
+                            <Button color='error' variant='text' onClick={changeClientDisplay}>Cancel</Button>
+                            <Button color='success' variant='text' onClick={addClient}>Add</Button>
+                        </Box>
+                        
+                    </Box>
+                </Box>   
             </Modal>
 
             <header style={{ }}>

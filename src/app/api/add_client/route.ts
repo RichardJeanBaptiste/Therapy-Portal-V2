@@ -10,8 +10,9 @@ export async function POST(request: Request){
         await connectToMongo();
         let data = await request.json();
 
+        console.log(data);
 
-        let resMessage = "";
+        let resMessage = "ABCDE";
         
         return NextResponse.json({"msg": resMessage}, {status: 200});
 
