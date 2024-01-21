@@ -47,7 +47,8 @@ const useStyles = (theme: any) => ({
     },
     listIcons2: {
         position: 'absolute',
-        bottom: '3%'
+        bottom: 0,
+        left: 0,
     },
     
       
