@@ -31,8 +31,10 @@ export async function POST(request: Request){
                     DatesAvailable: [],
                     History: [],
                     Clients: [],
+                    Messages: [],
                     Info: {
-                        Name: x.name,
+                        Firstname: x.firstname,
+                        Lastname: x.lastname,
                         Age: x.age,
                         Speciality: x.specialty,
                         Bio: x.bio,
@@ -59,8 +61,10 @@ export async function POST(request: Request){
                     DatesReserved: [],
                     History: [],
                     Therapists: [],
+                    Messages: [],
                     Info: {
-                        Name: x.name,
+                        Firstname: x.firstname,
+                        Lastname: x.lastname,
                         Age: x.age,
                         Bio: x.bio
                     },

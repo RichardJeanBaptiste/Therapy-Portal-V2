@@ -122,6 +122,14 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
         }    
     }
 
+    const handleClientFirst = (e: any) => {
+        SetClientFirst(e.target.value);
+    }
+
+    const handleClientLast = (e: any) => {
+        SetClientLast(e.target.value);
+    }
+
     const addClient = () => {
         axios.post('/api/add_client/', {
             Username: username,
@@ -190,8 +198,8 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
                     <Box sx={styles.add_client}>
 
                         <FormControl sx={{ width: '100%' }}>
-                            <TextField sx={styles.textField1} type='text' variant='outlined' label='First Name' fullWidth/>
-                            <TextField sx={styles.textField1} type='text' variant='outlined' label='Last Name' fullWidth/>
+                            <TextField sx={styles.textField1} type='text' variant='outlined' label='First Name' fullWidth onChange={handleClientFirst}/>
+                            <TextField sx={styles.textField1} type='text' variant='outlined' label='Last Name' fullWidth onChange={handleClientLast}/>
 
                             <Box sx={{ paddingBottom: '2%'}}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>

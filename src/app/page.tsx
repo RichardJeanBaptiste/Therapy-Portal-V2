@@ -108,6 +108,8 @@ export default function Home() {
   const [regPassword, SetRegPassword] = useState("");
   const [regRole, SetRegRole] = useState("");
   const [regName, SetRegName] = useState("");
+  const [regFirstName, SetRegFirstName] = useState("");
+  const [regLastName, SetRegLastName] = useState("");
   const [regAge, SetRegAge] = useState("");
   const [regBio, SetRegBio] = useState("");
   const [regSpecialty, SetRegSpecialty] = useState("");
@@ -192,6 +194,14 @@ export default function Home() {
     SetRegName(e.target.value);
   }
 
+  const handleRegFirstname = (e: any) => {
+    SetRegFirstName(e.target.value);
+  }
+
+  const handleRegLastname = (e: any) => {
+    SetRegLastName(e.target.value);
+  }
+
   const handleRegAge = (e: any) => {
     SetRegAge(e.target.value);
   }
@@ -220,6 +230,8 @@ export default function Home() {
       password: regPassword,
       role: regRole,
       name: regName,
+      firstname: regFirstName,
+      lastname: regLastName,
       age: regAge,
       bio: regBio,
       specialty: regSpecialty,
@@ -233,7 +245,9 @@ export default function Home() {
       alert(response.data.msg);
       SetRegUsername("");
       SetRegPassword("");
-      SetRegName("");
+      //SetRegName("");
+      SetRegFirstName("");
+      SetRegLastName("");
       SetRegAge("");
       SetRegRole("");
       SetRegBio("");
@@ -276,7 +290,8 @@ export default function Home() {
 
                 <TextField sx={styles.modalTextField} label='Username' placeholder="Username" type="text" onChange={handleRegUsername} required/>
                 <TextField sx={styles.modalTextField} label='Password' placeholder='Password' type="password" onChange={handleRegPassword} required/>
-                <TextField sx={styles.modalTextField} label='Name' placeholder='Name' type='text' onChange={handleRegName} required/>
+                <TextField sx={styles.modalTextField} label='Firstname' placeholder='Firstname' type='text' onChange={handleRegFirstname} required/>
+                <TextField sx={styles.modalTextField} label='Lastname' placeholder='Lastname' type='text' onChange={handleRegLastname} required/>
                 <TextField sx={styles.modalTextField} label='Age' placeholder='Age' type='text' onChange={handleRegAge} />
                 <TextField sx={styles.modalTextField} label="Bio" variant="outlined"  multiline maxRows={4} fullWidth onChange={handleRegBio}/>
                 <Box sx={{ display:handleDisplay }}>

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const TherapistSchema = new mongoose.Schema({
     Username: String,
     Password: String,
@@ -9,6 +8,7 @@ const TherapistSchema = new mongoose.Schema({
     DatesScheduled: Array,
     Clients: Array,
     History: Array,
+    Messages: Array,
     Info: Array,
 })
 
@@ -19,6 +19,7 @@ const ClientSchema = new mongoose.Schema({
     DatesReserved: Array,
     Therapists: Array,
     History: Array,
+    Messages: Array,
     Info: Array,
 })
 

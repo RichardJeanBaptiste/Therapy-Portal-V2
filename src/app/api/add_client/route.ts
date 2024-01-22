@@ -3,14 +3,19 @@ import mongoose from "mongoose";
 import { connectToMongo, } from "../ServerFunctions";
 import 'dotenv/config';
 import { therapists, clients } from "../Schemas/UserSchemas";
-
+/**
+ * 
+ * Problems: What If two people have the same name?
+ */
 
 export async function POST(request: Request){
     try {
         await connectToMongo();
         let data = await request.json();
 
-        console.log(data);
+        let query = await clients.find({"Info.Firstname": data.Firstname, "Info.Lastname": data.Lastname})
+        
+        console.log(query);
 
         let resMessage = "ABCDE";
         
