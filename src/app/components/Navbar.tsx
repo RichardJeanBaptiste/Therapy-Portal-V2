@@ -12,6 +12,7 @@ import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import FaceRoundedIcon from '@mui/icons-material/FaceRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
+
 const useStyles = (theme: any) => ({
     root: {
         display: 'flex'
@@ -49,9 +50,7 @@ const useStyles = (theme: any) => ({
         position: 'absolute',
         bottom: 0,
         left: 0,
-    },
-    
-      
+    },   
 })
 
 
@@ -59,13 +58,16 @@ const Navbar = (props: any) => {
     const theme = useTheme();
     const styles = useStyles(theme);
 
-    const [screenWidth, SetScreenWidth] = useState(window.innerWidth);
+    const [screenWidth, SetScreenWidth] = useState<number>();
 
     const handleResize = () => {
         SetScreenWidth(window.innerWidth);
     }
 
     useEffect(() => {
+
+        SetScreenWidth(window.innerWidth);
+
         window.addEventListener('resize', handleResize);
 
         return () => {
@@ -219,7 +221,9 @@ const Navbar = (props: any) => {
     }
 
     const Nav = () => {
-        if(screenWidth < 768){
+        if(screenWidth === undefined){
+            return(<></>)
+        } else if(screenWidth < 768){
             return (<MobileNav/>)
         } else {
             return (<LargeNav/>)
