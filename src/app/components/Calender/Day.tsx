@@ -83,7 +83,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
 
     const theme = useTheme();
     const styles = useStyles(theme);
-
+    
     
     const getCurrentDay = () => {
         if(day.format("DD-MM-YY") === currentDate.format("DD-MM-YY")){

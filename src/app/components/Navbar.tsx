@@ -11,6 +11,8 @@ import TipsAndUpdatesRoundedIcon from '@mui/icons-material/TipsAndUpdatesRounded
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import FaceRoundedIcon from '@mui/icons-material/FaceRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/navigation';
 
 
 const useStyles = (theme: any) => ({
@@ -44,7 +46,7 @@ const useStyles = (theme: any) => ({
         overflowX: 'hidden'
     },
     listIcons: {
-        paddingBottom: '4em',
+        paddingBottom: '3em',
     },
     listIcons2: {
         position: 'absolute',
@@ -57,6 +59,7 @@ const useStyles = (theme: any) => ({
 const Navbar = (props: any) => {
     const theme = useTheme();
     const styles = useStyles(theme);
+    const router = useRouter();
 
     const [screenWidth, SetScreenWidth] = useState<number>();
 
@@ -74,6 +77,10 @@ const Navbar = (props: any) => {
             window.removeEventListener('resize', handleResize);
         };
     },[]);
+
+    const handleLogout = () => {
+        router.push('/', {scroll: false});
+    }
 
     const UsersIcon = () => {
         if(props.role === "therapist"){
@@ -140,10 +147,18 @@ const Navbar = (props: any) => {
                         </Tooltip>
                     </ListItemIcon>
 
-                    <ListItemIcon sx={styles.listIcons2}>
+                    <ListItemIcon sx={styles.listIcons}> 
                         <Tooltip title="Settings" placement='right' arrow>
                             <IconButton onClick={props.showSettings}>
                                 <SettingsRoundedIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </ListItemIcon>
+
+                    <ListItemIcon sx={styles.listIcons2}>
+                        <Tooltip title="Logout" placement='right' arrow>
+                            <IconButton onClick={handleLogout}>
+                                <LogoutIcon/>
                             </IconButton>
                         </Tooltip>
                     </ListItemIcon>
@@ -206,10 +221,18 @@ const Navbar = (props: any) => {
                             </Tooltip>
                         </ListItemIcon>
 
-                        <ListItemIcon sx={styles.listIcons2}>
+                        <ListItemIcon sx={styles.listIcons}>
                             <Tooltip title="Settings" placement='right' arrow>
                                 <IconButton onClick={props.showSettings}>
                                     <SettingsRoundedIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </ListItemIcon>
+
+                        <ListItemIcon sx={styles.listIcons2}>
+                            <Tooltip title="Logout" placement='right' arrow>
+                                <IconButton onClick={handleLogout}>
+                                    <LogoutIcon/>
                                 </IconButton>
                             </Tooltip>
                         </ListItemIcon>
