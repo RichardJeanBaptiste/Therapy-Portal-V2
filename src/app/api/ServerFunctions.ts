@@ -3,26 +3,9 @@ import 'dotenv/config';
 import { therapists, clients } from "./Schemas/UserSchemas";
 import bcrypt from 'bcrypt';
 import { NextResponse } from "next/server";
+import { Therapist, Client } from "./Interfaces";
 
 
-interface Therapist {
-    id: string;
-    Username: string;
-    Role: string;
-    DatesAvailable: Array<string>;
-    DatesScheduled: Array<string>;
-    Clients: Array<string>;
-    Info: string;
-}
-  
-interface Client {
-    _id: string;
-    Username: string;
-    Role: string;
-    DatesReserved: Array<string>;
-    Therapists: Array<string>;
-    Info: string;
-}
 
 
 let mongo_uri:string | undefined = process.env.MONGO_URI;
@@ -136,7 +119,7 @@ export const getUserFromUsername = async (requestUsername: string): Promise<Arra
     if(query1 !== null){
         // therapist
        
-        return { "id": query1._id, "Username": query1.Username, "Role": query1.Role, "DatesAvailable": query1.DatesAvailable, "DatesScheduled": query1.DatesScheduled, "Clients": query1.Clients, "Info": query1.Info } as Therapist;
+        return { "id": query1._id, "Username": query1.Username, "Role": query1.Role, "DatesAvailable": query1.DatesAvailable, "DatesScheduled": query1.DatesScheduled, "Clients": query1.Clients, "Info": query1.Info } as any;
        
     } else if(query2 !== null){
         //client
@@ -147,5 +130,25 @@ export const getUserFromUsername = async (requestUsername: string): Promise<Arra
         //User not found
         return null;
     }
+}
+
+export function isTherapist(obj: any): obj is Therapist {
+    return obj instanceof Object &&
+           'id' in obj &&
+           'Username' in obj &&
+           'Role' in obj &&
+           'DatesAvailable' in obj &&
+           'DatesScheduled' in obj &&
+           'Clients' in obj &&
+           'Info' in obj;
+}
+
+export function isClient(obj: any): obj is Client{
+    return obj instanceof Object &&
+           'id' in obj &&
+           'Username' in obj &&
+           'Role' in obj &&
+           'DatesReserved' in obj &&
+           'Info' in obj;
 }
 

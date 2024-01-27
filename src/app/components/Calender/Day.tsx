@@ -146,6 +146,10 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
         });
     }
 
+    const showDatesScheduled = () => {
+        
+    }
+
     const deleteReservation = () => {
 
     }
