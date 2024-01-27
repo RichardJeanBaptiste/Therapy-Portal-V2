@@ -2,6 +2,7 @@
 
 import React, {useState} from 'react';
 import { Box, Typography, TextField, Button, FormControl, FormLabel, FormControlLabel, Radio, Modal, RadioGroup } from '@mui/material';
+import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
 import { useTheme }  from '@mui/material/styles';
 import axios from 'axios';
 
@@ -37,16 +38,16 @@ const useStyles = (theme: any) => ({
     }
   })
 
+const queryClient = new QueryClient();
 
 export const RegistrationForm = ({open, handleClose}: any) => {
 
     const theme = useTheme();
     const styles = useStyles(theme);
-
+    
     const [regUsername, SetRegUsername] = useState("");
     const [regPassword, SetRegPassword] = useState("");
     const [regRole, SetRegRole] = useState("");
-    const [regName, SetRegName] = useState("");
     const [regFirstName, SetRegFirstName] = useState("");
     const [regLastName, SetRegLastName] = useState("");
     const [regAge, SetRegAge] = useState("");
@@ -54,6 +55,7 @@ export const RegistrationForm = ({open, handleClose}: any) => {
     const [regSpecialty, SetRegSpecialty] = useState("");
     const [regEducation, SetRegEducation] = useState("");
     const [regYearsWorking, SetRegYearsWorking] = useState("");
+    const [disbaleButton, SetDisableButton] = useState(false);
 
     const handleRegRole = (e: any) => {
         SetRegRole(e.target.value);
@@ -102,44 +104,50 @@ export const RegistrationForm = ({open, handleClose}: any) => {
     const handleRegYearsWorking = (e: any) => {
         SetRegYearsWorking(e.target.value);
     }
+
+
+    const mutation = useMutation({
+        mutationFn: async () => {
+            let data = {
+                username: regUsername,
+                password: regPassword,
+                role: regRole,
+                firstname: regFirstName,
+                lastname: regLastName,
+                age: regAge,
+                bio: regBio,
+                specialty: regSpecialty,
+                education: regEducation,
+                yearsWorking: regYearsWorking
+            }
+            return axios.post('/api/register', data)
+                    .then(function (response) {
+                        alert(response.data.msg);
+                        SetRegUsername("");
+                        SetRegPassword("");
+                        SetRegFirstName("");
+                        SetRegLastName("");
+                        SetRegAge("");
+                        SetRegRole("");
+                        SetRegBio("");
+                        SetRegSpecialty("");
+                        SetRegEducation("");
+                        SetRegYearsWorking("");
+                        handleClose();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert("Something Went Wrong");
+                    });
+            },
+      })
     
     const handleRegSubmit = (e:any) => {
         e.preventDefault();
-
-        let data = {
-            username: regUsername,
-            password: regPassword,
-            role: regRole,
-            name: regName,
-            firstname: regFirstName,
-            lastname: regLastName,
-            age: regAge,
-            bio: regBio,
-            specialty: regSpecialty,
-            education: regEducation,
-            yearsWorking: regYearsWorking
-        }
-
-        axios.post('/api/register', data)
-        .then(function (response) {
-            alert(response.data.msg);
-            SetRegUsername("");
-            SetRegPassword("");
-            SetRegFirstName("");
-            SetRegLastName("");
-            SetRegAge("");
-            SetRegRole("");
-            SetRegBio("");
-            SetRegSpecialty("");
-            SetRegEducation("");
-            SetRegYearsWorking("");
-            handleClose();
-        })
-        .catch(function (error) {
-            console.log(error);
-            alert("Something Went Wrong");
-        });
+        SetDisableButton(true);
+        mutation.mutate();
     }
+
     return (
         <Modal
             open={open}
@@ -175,7 +183,7 @@ export const RegistrationForm = ({open, handleClose}: any) => {
             </FormControl>
                 <Box sx={{ display: 'flex', flexDirection:'row'}}>
                     <Button variant='text' color='error' onClick={handleClose}>Cancel</Button>
-                    <Button type='submit'>Register</Button>
+                    <Button type='submit' disabled={disbaleButton}>Register</Button>
                 </Box>
           </form>
         </Box>

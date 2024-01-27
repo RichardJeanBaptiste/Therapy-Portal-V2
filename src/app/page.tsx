@@ -1,11 +1,11 @@
 "use client"
 
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import { Box, Typography, TextField, Button, FormControl, FormLabel, FormControlLabel, Radio, Modal, RadioGroup } from '@mui/material';
 import { useTheme }  from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
 import { RegistrationForm } from './components/RegistrationForm';
 
 
@@ -71,7 +71,6 @@ const useStyles = (theme: any) => ({
 const queryClient = new QueryClient();
 
 
-
 const Homepage = () => {
 
   const theme = useTheme();
@@ -80,6 +79,8 @@ const Homepage = () => {
   const [open, setOpen] = useState(false);
   const [loginUsername, SetLoginUsername] = useState("");
   const [loginPassword, SetLoginPassword] = useState("");
+  const [disbaleButton, SetDisableButton] = useState(false);
+  
 
   const handleOpen = () => {
     setOpen(true);
@@ -95,35 +96,45 @@ const Homepage = () => {
     SetLoginPassword(e.target.value);
   }
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      return axios.post('/api/login', {
+        username: loginUsername,
+        password: loginPassword
+      })
+      .then(function (response) {
+  
+        if(response.status === 200){
+
+          SetDisableButton(false);
+        
+          if(response.data[2] === "therapist"){
+            router.push(`/home/therapist/${response.data[1]}-${response.data[0]}`, {scroll: false});
+          } else {
+            router.push(`/home/client/${response.data[1]}-${response.data[0]}`, {scroll: false});
+          }
+        } else if(response.status === 404){
+          console.log(response.data.msg);
+        }
+      })
+      .catch(function (error) {
+  
+        if(error.response.status === 404){
+          alert("Username or Password not found");
+          SetDisableButton(false);
+        } else {
+          console.log(error);
+          alert("Something Went Wrong");
+          SetDisableButton(false);
+        }
+      });
+    },
+  })
+
   const handleSubmit = (e:any) => {
     e.preventDefault();
-
-    axios.post('/api/login', {
-      username: loginUsername,
-      password: loginPassword
-    })
-    .then(function (response) {
-
-      if(response.status === 200){
-      
-        if(response.data[2] === "therapist"){
-          router.push(`/home/therapist/${response.data[1]}-${response.data[0]}`, {scroll: false});
-        } else {
-          router.push(`/home/client/${response.data[1]}-${response.data[0]}`, {scroll: false});
-        }
-      } else if(response.status === 404){
-        console.log(response.data.msg);
-      }
-    })
-    .catch(function (error) {
-
-      if(error.response.status === 404){
-        alert("Username or Password not found");
-      } else {
-        console.log(error);
-        alert("Something Went Wrong");
-      }
-    });
+    SetDisableButton(true);
+    mutation.mutate();
   }
 
   return (
@@ -137,7 +148,7 @@ const Homepage = () => {
             <TextField sx={styles.loginTextField} label='Password' placeholder='Password' type='password' required onChange={handlePassword}/>
             <Box sx={styles.loginBtns}>
               <Button onClick={handleOpen}>Register</Button>
-              <Button type='submit'>Login</Button>
+              <Button type='submit' disabled={disbaleButton}>Login</Button>
             </Box>
         </FormControl>
       </form>
