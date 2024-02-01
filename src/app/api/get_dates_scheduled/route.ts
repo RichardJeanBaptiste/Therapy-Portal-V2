@@ -11,14 +11,16 @@ export async function POST(request: Request){
         await connectToMongo();
         let data = await request.json();
         
+        let res = {};
 
-        let query: Object| Therapist | null = await getUserFromUsername(data.Username);
+        let query = await getUserFromUsername(data.Username);
 
         if(isTherapist(query)){
-            console.log(query.DatesScheduled);
+            //console.log(query.DatesScheduled);
+            res = query.DatesScheduled;
         }
         
-        return NextResponse.json({"msg": "abcde"}, {status: 200});
+        return NextResponse.json(res, {status: 200})
 
     } catch (error) {
         mongoose.disconnect();

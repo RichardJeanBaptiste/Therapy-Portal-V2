@@ -2,6 +2,7 @@
 
 import React,{useEffect, useContext} from 'react';
 import { CalenderContext } from './CalenderContext';
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTheme }  from '@mui/material/styles';
 import { Box, IconButton, Tooltip } from '@mui/material';
@@ -12,6 +13,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import MonthName from './MonthName';
 import Day from './Day';
+
 
 
 const useStyles = (theme: any) => ({
@@ -107,6 +109,8 @@ const useStyles = (theme: any) => ({
     }
 })
 
+const queryClient = new QueryClient();
+
 
 const DesktopCalender = () => {
 
@@ -187,4 +191,11 @@ const DesktopCalender = () => {
     )
 }
 
-export default DesktopCalender;
+
+export default function CProvider() {
+    return (
+        <QueryClientProvider client={queryClient}>
+            <DesktopCalender/>
+        </QueryClientProvider>
+    )
+}

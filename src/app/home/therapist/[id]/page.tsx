@@ -94,7 +94,7 @@ const Homepage = (props: any) => {
                 CurrentComp = <Updates/>
                 break;
             case "Settings":
-                CurrentComp = <Settings/>
+                CurrentComp = <Settings username={user.Username}/>
                 break;
             default:
                 CurrentComp = (

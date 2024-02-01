@@ -1,7 +1,8 @@
 "use client"
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Box, Typography, Modal, Divider, Button, FormControl, TextField } from "@mui/material";
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -18,6 +19,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
     const [clientLast, SetClientLast] = useState("");
     const [appTime, SetAppTime] = useState("");
     const [duration, SetDuration] = useState("30");
+    const [datesScheduled, SetDatesScheduled]= useState([]);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -84,7 +86,18 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
     const theme = useTheme();
     const styles = useStyles(theme);
     
-    
+    useEffect(() => {
+        axios.post('/api/get_dates_scheduled/', {
+            Username: username,
+        }).then(function(response){
+            //console.log(response.data);
+            SetDatesScheduled(response.data);
+        }).catch(function(error){
+            console.log(error);
+            alert("Something went wrong :(");
+        });
+    },[]);
+
     const getCurrentDay = () => {
         if(day.format("DD-MM-YY") === currentDate.format("DD-MM-YY")){
             return styles.selectedDay
@@ -98,18 +111,40 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
         handleOpen();
     }
 
-    const makeAvailable = () => {
-        
-        axios.post('/api/make_date_available/', {
-            Username: username,
-            newDate: currentDate
-        }).then(function(response){
-            alert(response.data.msg);
-        }).catch(function (error) {
-           console.log(error);
-           alert("Something went wrong :(");
-        });
-    }
+
+    const makeAvailableMutation = useMutation({
+        mutationFn: async () => {
+            axios.post('/api/make_date_available/', {
+                Username: username,
+                newDate: currentDate
+            }).then(function(response){
+                alert(response.data.msg);
+            }).catch(function (error) {
+            console.log(error);
+            alert("Something went wrong :(");
+            });
+        }
+    })
+
+    
+    const addClientMutation = useMutation({
+        mutationFn: async () => {
+            axios.post('/api/add_client/', {
+                Username: username,
+                Firstname: clientFirst,
+                Lastname: clientLast, 
+                newDate: currentDate,
+                appointmentTime: appTime,
+                duration: duration
+            }).then(function(response){
+                alert(response.data.msg);
+            }).catch(function(error){
+                console.log(error);
+                alert("Something went wrong :(");
+            });
+        }
+    })
+
 
     const changeClientDisplay = () => {
 
@@ -130,24 +165,20 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
         SetClientLast(e.target.value);
     }
 
-    const addClient = () => {
-        axios.post('/api/add_client/', {
-            Username: username,
-            Firstname: clientFirst,
-            Lastname: clientLast, 
-            newDate: currentDate,
-            appointmentTime: appTime,
-            duration: duration
-        }).then(function(response){
-            alert(response.data.msg);
-        }).catch(function(error){
-            console.log(error);
-            alert("Something went wrong :(");
-        });
-    }
-
-    const showDatesScheduled = () => {
-        
+    
+    
+    const ShowDatesScheduled = () => {
+        return (
+            <ul style={{marginLeft: '-5%'}}>
+                {Array.isArray(datesScheduled) ? (
+                    datesScheduled.map((x, i) => (
+                        <li key={i}>{dayjs(x).format('MM/DD/YYYY')}</li>
+                    ))
+                ) : (
+                    <></>
+                )}
+            </ul>
+        )
     }
 
     const deleteReservation = () => {
@@ -180,7 +211,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
 
                     <Box sx={styles.innerModalBox}>
                         <Box sx={styles.innerModal1}>
-                            <Button variant="text" onClick={makeAvailable}>Make Available</Button>
+                            <Button variant="text" onClick={() => makeAvailableMutation.mutate()}>Make Available</Button>
                             <Button variant="text" onClick={changeClientDisplay}>Add Client</Button>
                             <Button variant="text" onClick={deleteReservation}>Delete Reservation</Button>
                             <Button variant="text" onClick={cancel}>Cancel</Button>
@@ -190,12 +221,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
 
                         <Box sx={styles.innerModal2}>
                             <Typography variant="h6" component="p" align='center'>Appointments Scheduled</Typography>
-                            <ul>
-                                <li>A</li>
-                                <li>B</li>
-                                <li>C</li>
-                                <li>D</li>
-                            </ul>
+                            <ShowDatesScheduled/>
                         </Box>  
                     </Box>
 
@@ -220,7 +246,7 @@ const Day = ({day, rowIdx, currentDate, setActive, dayheader, username}: any) =>
 
                         <Box sx={{ display: 'flex', flexDirection: 'row'}}>
                             <Button color='error' variant='text' onClick={changeClientDisplay}>Cancel</Button>
-                            <Button color='success' variant='text' onClick={addClient}>Add</Button>
+                            <Button color='success' variant='text' onClick={() => addClientMutation.mutate()}>Add</Button>
                         </Box>
                         
                     </Box>

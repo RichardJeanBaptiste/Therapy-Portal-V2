@@ -10,7 +10,6 @@ export async function POST(request: any){
         let data = await request.json();
 
         let queryUsername = data.username;
-        let queryPassword = data.password;
 
         let user = await getUserFromUsername(queryUsername);
         

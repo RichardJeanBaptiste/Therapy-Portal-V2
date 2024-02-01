@@ -1,11 +1,11 @@
 "use client"
 
 import React, {useState} from 'react';
-import { Box, Typography, TextField, Button, FormControl, FormLabel, FormControlLabel, Radio, Modal, RadioGroup } from '@mui/material';
+import { Box, Typography, TextField, Button, FormControl } from '@mui/material';
 import { useTheme }  from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query';
 import { RegistrationForm } from './components/RegistrationForm';
 
 
@@ -106,10 +106,9 @@ const Homepage = () => {
   
         if(response.status === 200){
 
-          SetDisableButton(false);
-        
           if(response.data[2] === "therapist"){
             router.push(`/home/therapist/${response.data[1]}-${response.data[0]}`, {scroll: false});
+            SetDisableButton(false);
           } else {
             router.push(`/home/client/${response.data[1]}-${response.data[0]}`, {scroll: false});
           }
