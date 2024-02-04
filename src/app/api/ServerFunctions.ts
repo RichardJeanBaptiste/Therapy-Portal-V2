@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { therapists, clients } from "./Schemas/UserSchemas";
 import bcrypt from 'bcrypt';
 import { NextResponse } from "next/server";
-import { Therapist, Client } from "./Interfaces";
+import { Therapist, Client, Therapist2 } from "./Interfaces";
 
 
 
@@ -132,10 +132,47 @@ export const getUserFromUsername = async (requestUsername: string): Promise<Arra
     }
 }
 
+export const getUserFromUsernameWithPass = async (requestUsername: string): Promise<Array<string> | Object | null | Therapist2> => {
+    let query1 = await therapists.findOne({Username: requestUsername}).then((docs) => {
+        return docs;
+    });
+
+    let query2 = await clients.findOne({Username: requestUsername}).then((docs) => {
+        return docs;
+    });
+
+    if(query1 !== null){
+        // therapist
+       
+        return { "id": query1._id, "Username": query1.Username, "Password": query1.Password, "Role": query1.Role, "DatesAvailable": query1.DatesAvailable, "DatesScheduled": query1.DatesScheduled, "Clients": query1.Clients, "Info": query1.Info } as any;
+       
+    } else if(query2 !== null){
+        //client
+
+        return [query2._id, query2.Username, query2.Role, query2.DatesReserved, query2.Therapists, query2.Info]
+        
+    } else {
+        //User not found
+        return null;
+    }
+}
+
 export function isTherapist(obj: any): obj is Therapist {
     return obj instanceof Object &&
            'id' in obj &&
            'Username' in obj &&
+           'Role' in obj &&
+           'DatesAvailable' in obj &&
+           'DatesScheduled' in obj &&
+           'Clients' in obj &&
+           'Info' in obj;
+}
+
+export function isTherapist2(obj: any): obj is Therapist {
+    return obj instanceof Object &&
+           'id' in obj &&
+           'Username' in obj &&
+           'Password' in obj &&
            'Role' in obj &&
            'DatesAvailable' in obj &&
            'DatesScheduled' in obj &&

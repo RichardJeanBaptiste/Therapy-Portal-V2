@@ -20,6 +20,17 @@ export interface Therapist {
     Info: string;
 }
 
+export interface Therapist2 {
+    id: string;
+    Username: string;
+    Password: string;
+    Role: string;
+    DatesAvailable: Array<string>;
+    DatesScheduled: Array<string>;
+    Clients: Array<string>;
+    Info: string;
+}
+
 export interface Client {
     _id: string;
     Username: string;
