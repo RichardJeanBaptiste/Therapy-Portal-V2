@@ -1,9 +1,11 @@
 "use client"
 
 import React, {useState} from 'react';
-import { Box, Typography, TextField, Button, FormControl, FormLabel, FormControlLabel, Radio, Modal, RadioGroup } from '@mui/material';
-import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
+import { Box, Typography, TextField, Button, FormControl, FormLabel, FormControlLabel, Radio, Modal, RadioGroup, Input, InputAdornment, IconButton, OutlinedInput, InputLabel } from '@mui/material';
+import { QueryClient, useMutation } from '@tanstack/react-query';
 import { useTheme }  from '@mui/material/styles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 
 const useStyles = (theme: any) => ({
@@ -35,6 +37,9 @@ const useStyles = (theme: any) => ({
     },
     modalTextField: {
       paddingBottom: '4%',
+    },
+    modalTextField2: {
+        height: '3.6em',
     }
   })
 
@@ -56,6 +61,7 @@ export const RegistrationForm = ({open, handleClose}: any) => {
     const [regEducation, SetRegEducation] = useState("");
     const [regYearsWorking, SetRegYearsWorking] = useState("");
     const [disbaleButton, SetDisableButton] = useState(false);
+    const [showPassword, SetShowPassword] = useState(false);
 
     const handleRegRole = (e: any) => {
         SetRegRole(e.target.value);
@@ -123,8 +129,9 @@ export const RegistrationForm = ({open, handleClose}: any) => {
             return axios.post('/api/register', data)
                     .then(function (response) {
                         alert(response.data.msg);
-                        if(response.data.msg === "Username already exists"){
+                        if(response.data.msg === "Username Already Exists"){
                             SetRegUsername("");
+                            SetDisableButton(false);
                         } else {
                             SetRegUsername("");
                             SetRegPassword("");
@@ -174,16 +181,40 @@ export const RegistrationForm = ({open, handleClose}: any) => {
                   </RadioGroup>
                 </FormControl>
 
-                <TextField sx={styles.modalTextField} label='Username' placeholder="Username" type="text" onChange={handleRegUsername} required/>
-                <TextField sx={styles.modalTextField} label='Password' placeholder='Password' type="password" onChange={handleRegPassword} required/>
-                <TextField sx={styles.modalTextField} label='Firstname' placeholder='Firstname' type='text' onChange={handleRegFirstname} required/>
-                <TextField sx={styles.modalTextField} label='Lastname' placeholder='Lastname' type='text' onChange={handleRegLastname} required/>
-                <TextField sx={styles.modalTextField} label='Age' placeholder='Age' type='text' onChange={handleRegAge} />
-                <TextField sx={styles.modalTextField} label="Bio" variant="outlined"  multiline maxRows={4} fullWidth onChange={handleRegBio}/>
+                <TextField sx={styles.modalTextField} label='Username' placeholder="Username" type="text" onChange={handleRegUsername} value={regUsername} required/>
+                
+                <FormControl variant='outlined' sx={{ height: '14%'}}>
+                    <InputLabel htmlFor='password'>Password</InputLabel>
+                    <OutlinedInput
+                        id="password"
+                        placeholder='Password'
+                        label="Password"
+                        type={showPassword ? 'text' : 'password'}
+                        onChange={handleRegPassword} 
+                        value={regPassword}
+                        sx={styles.modalTextField2}
+                        endAdornment= {
+                            <InputAdornment position="end">
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => SetShowPassword((show) => !show)}
+                                edge="end"
+                                >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+                
+                <TextField sx={styles.modalTextField} label='Firstname' placeholder='Firstname' type='text' onChange={handleRegFirstname} value={regFirstName} required/>
+                <TextField sx={styles.modalTextField} label='Lastname' placeholder='Lastname' type='text' onChange={handleRegLastname} value={regLastName} required/>
+                <TextField sx={styles.modalTextField} label='Age' placeholder='Age' type='text' onChange={handleRegAge} value={regAge}/>
+                <TextField sx={styles.modalTextField} label="Bio" variant="outlined"  multiline maxRows={4} fullWidth onChange={handleRegBio} value={regBio}/>
                 <Box sx={{ display:handleDisplay }}>
-                    <TextField id="specialty"  label="Specialty" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegSpecialty}/>
-                    <TextField id="education"  label="Education" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegEducation}/>
-                    <TextField id="years_working"  label="Years Working" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegYearsWorking}/>
+                    <TextField id="specialty"  label="Specialty" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegSpecialty} value={regSpecialty}/>
+                    <TextField id="education"  label="Education" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegEducation} value={regEducation}/>
+                    <TextField id="years_working"  label="Years Working" variant="outlined"   fullWidth sx={{ paddingBottom: '2.5%'}} onChange={handleRegYearsWorking} value={regYearsWorking}/>
                 </Box>
             </FormControl>
                 <Box sx={{ display: 'flex', flexDirection:'row'}}>
