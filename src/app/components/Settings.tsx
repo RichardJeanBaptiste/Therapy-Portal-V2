@@ -46,6 +46,7 @@ const Settings = ({username}: any) => {
       SetFirstName(response.data.Info[0].Firstname);
       SetLastName(response.data.Info[0].Lastname);
       //SetAge(response.data.Info.Age);
+      SetBio(response.data.Info[0].Bio);
       SetSpecialty(response.data.Info[0].Speciality);
       SetEducation(response.data.Info[0].Education);
       SetYearsWorking(response.data.Info[0].YearsWorking);
@@ -79,20 +80,3 @@ const Settings = ({username}: any) => {
 }
 
 export default Settings
-
-/**
- * Firstname
-"John"
-Lastname
-"Blake"
-Age
-""
-Speciality
-""
-Bio
-""
-Education
-""
-YearsWorking
-""
- */

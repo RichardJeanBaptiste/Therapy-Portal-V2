@@ -123,17 +123,22 @@ export const RegistrationForm = ({open, handleClose}: any) => {
             return axios.post('/api/register', data)
                     .then(function (response) {
                         alert(response.data.msg);
-                        SetRegUsername("");
-                        SetRegPassword("");
-                        SetRegFirstName("");
-                        SetRegLastName("");
-                        SetRegAge("");
-                        SetRegRole("");
-                        SetRegBio("");
-                        SetRegSpecialty("");
-                        SetRegEducation("");
-                        SetRegYearsWorking("");
-                        handleClose();
+                        if(response.data.msg === "Username already exists"){
+                            SetRegUsername("");
+                        } else {
+                            SetRegUsername("");
+                            SetRegPassword("");
+                            SetRegFirstName("");
+                            SetRegLastName("");
+                            SetRegAge("");
+                            SetRegRole("");
+                            SetRegBio("");
+                            SetRegSpecialty("");
+                            SetRegEducation("");
+                            SetRegYearsWorking("");
+                            SetDisableButton(false);
+                            handleClose();
+                        }  
                     })
                     .catch(function (error) {
                         console.log(error);

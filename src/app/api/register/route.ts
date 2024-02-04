@@ -24,6 +24,8 @@ export async function POST(request: Request){
                 mongoose.disconnect();
                 return NextResponse.json({ msg: 'Username Already Exists'} , {status: 200});
             } else {
+                
+
                 let newTherapist = new therapists({
                     Username: x.username,
                     Password: hashedPassword,
@@ -35,7 +37,7 @@ export async function POST(request: Request){
                     Info: {
                         Firstname: x.firstname,
                         Lastname: x.lastname,
-                        Age: x.age,
+                        Age: x.age !== "" ? 0 : x.age,
                         Speciality: x.specialty,
                         Bio: x.bio,
                         Education: x.education,
