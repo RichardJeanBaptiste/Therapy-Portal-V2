@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Box, TextField, Typography, Button } from '@mui/material';
+import { NumberInput } from './NumberInput';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 
@@ -33,7 +34,7 @@ const Settings = ({username}: any) => {
 
   const [firstName, SetFirstName] = useState("");
   const [lastName, SetLastName] = useState("");
-  const [age, SetAge] = useState(0);
+  const [age, SetAge] = useState(1);
   const [speciality, SetSpecialty] = useState("");
   const [bio, SetBio] = useState("");
   const [education, SetEducation] = useState("");
@@ -43,7 +44,7 @@ const Settings = ({username}: any) => {
   /*********************************************************/
   const [orgFirstName, SetOrgFirstName] = useState("");
   const [orgLastName, SetOrgLastName] = useState("");
-  const [orgAge, SetOrgAge] = useState("");
+  const [orgAge, SetOrgAge] = useState(1);
   const [orgSpeciality, SetOrgSpeciality] = useState("");
   const [orgBio, SetOrgBio] = useState("");
   const [orgEducation, SetOrgEducation] = useState("");
@@ -59,7 +60,8 @@ const Settings = ({username}: any) => {
         SetOrgFirstName(response.data.Info[0].Firstname);
         SetLastName(response.data.Info[0].Lastname);
         SetOrgLastName(response.data.Info[0].Lastname)
-        //SetAge(response.data.Info.Age);
+        SetAge(response.data.Info.Age);
+        SetOrgAge(response.data.Info.Age);
         SetPassHash(response.data.Password);
         SetBio(response.data.Info[0].Bio);
         SetOrgBio(response.data.Info[0].Bio)
@@ -77,7 +79,7 @@ const Settings = ({username}: any) => {
   const handleReset = () => {
       SetFirstName(orgFirstName);
       SetLastName(orgLastName);
-      //SetAge(orgAge);
+      SetAge(orgAge);
       SetBio(orgBio);
       SetSpecialty(orgSpeciality);
       SetEducation(orgEducation);
@@ -108,6 +110,13 @@ const Settings = ({username}: any) => {
     SetYearsWorking(e.target.value);
   }
 
+  const handleAge = (e: any, val : any) => {
+    e.preventDefault();
+    if((val - 1) !== -1){
+      SetAge(val);
+    } 
+  }
+
 
   return (
     <Box sx={styles.root}>
@@ -116,7 +125,15 @@ const Settings = ({username}: any) => {
             <Box sx={styles.input_col1}>
                 <TextField sx={styles.text_style} type='text' label="First Name" value={firstName} onChange={handleFirstName}/>
                 <TextField sx={styles.text_style} type='text' label="Last Name" value={lastName} onChange={handleLastName}/>
-                <TextField sx={styles.text_style} type='text' label="Age" value={age.toString()}/>
+                <Box sx={{ paddingBottom: '2.5%'}}>
+                  <NumberInput
+                    aria-label="Demo number input"
+                    placeholder="Type a number…"
+                    value={age}
+                    onChange={handleAge}
+                  />
+                </Box>
+                
                 <TextField sx={styles.text_style} type='text' label="Specialty" value={speciality} onChange={handleSpeciality}/>
                 <TextField sx={styles.text_style} type='text' label="Bio" multiline value={bio} onChange={handleBio}/>
                 <TextField sx={styles.text_style} type='text' label='Education' value={education} onChange={handleEducation}/>
